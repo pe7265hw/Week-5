@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Tree Order Form</title>
+
+  <style>
+      
+      input, select {
+          width: 100%;
+          padding: 5px;
+          margin: 5px 5px 5px 0px;
+          box-sizing: border-box;
+      }
+
+      input.error, select.error {
+        border: 2px red solid;
+      }
+
+  </style>
+
+</head>
+<body>
+
+    <h1>Minnesota Tree Order Form</h1>
+
+    <p>Enter information to order your tree. All fields are required.</p>
+
+    <h2>Order Information</h2>
+
+    <label for="homeowner-name">Homeowner Name</label><input id="homeowner-name" name="homeowner-name">
+    <br>
+    <label for="homeowner-house-number">House Number</label><input id="homeowner-house-number" name="homeowner-house-number">
+    <br>
+    <label for="homeowner-street-name">Street Name</label><input id="homeowner-street-name" name="homeowner-street-name">
+    <br>
+    <label for="city">City</label><input id="city" name="city"> 
+    <br>
+    <!-- All orders must be for Minnesota, so this input is not editable -->
+    <label for="state">State</label><input id="state" name="state" value="Minnesota" disabled> 
+    <br>
+    <label for="zipcode">Zip Code</label><input id="zipcode" name="zipcode">
+    <br>
+
+    <label for="tree-type">Tree Type</label>
+    <select id="tree-type">
+        <!-- Unselectable message shown. Since this will be required, it forces the user to actually pick a tree, not just click submit for the default first option -->
+        <option disabled selected value=""> Select a tree </option>  
+        <!-- The options that the user will be allowed to select, or choose from -->
+        <option name="tree-type">Cedar</option>
+        <option name="tree-type">Maple</option>
+        <option name="tree-type">Oak</option>
+    </select>
+    <br>
+
+    <button id="submit-order">Submit Order</button>    
+
+    <h2>Order Summary</h2>
+
+    <p id="order-summary">
+        <!-- TODO Use JavaScript to display the order information, 
+            only if all the required information is entered  -->
+    </p>
+    
+
+
+<script>
+    // all input variables for input
+    let homeownerNameInput = document.querySelector('#homeowner-name')
+
+    let homeownerHouseNumberInput = document.querySelector('#homeowner-house-number')
+
+    let homeownerStreetNameInput = document.querySelector('#homeowner-street-name')
+
+    let treeTypeSelect = document.querySelector('#tree-type')
+
+    let homeownerCityInput = document.querySelector('#city')
+
+    let homeownerZipInput = document.querySelector('#zipcode')
+
+    //button variable
+    let submitButton = document.querySelector('#submit-order')
+
+    //variable where final information will be displayed
+    let orderSummaryParagraph = document.querySelector('#order-summary')
+
+    submitButton.addEventListener('click', function() {
+        // value variable created from querySelectors
+        let name = homeownerNameInput.value 
+
+        let houseNumber = homeownerHouseNumberInput.value
+
+        let streetName = homeownerStreetNameInput.value
+
+        let treeType = treeTypeSelect.value
+
+        // TODO get the value from the input#city
+        let city = homeownerCityInput.value
+        // TODO get the value from the input#zipcode
+        let zipcode = homeownerZipInput.value
+
+        //blank array used for errors
+        let errors = []
+        //blank array used for final summary message
+        let summaryMessage = []
+        //array of values used for validation and order summary
+        let values = [name, houseNumber, streetName, city, zipcode, treeType]
+        //array of validation messages used with for loop
+        let messages = ['Please enter a valid name.', 'Please enter a valid house number.', 'Please enter a valid street.',
+        'Please enter a valid city.', 'Please enter a valid zipcode.', 'Please select a tree type.']
+        //order summary labels array used for final output
+        let messageLabels = ['Name: ', 'House Number: ', 'Street Name: ', 'City: ', 'Zipcode: ', 'Tree type: ']
+        
+        // for loop used to check for all missing input values
+        for (let x = 0; x < values.length; x++){
+            if(!values[x]){
+                errors.push(messages[x])
+            }
+        
+    
+        }
+        if(zipcode != null){ //extra conditional statement to skip this if no zip entered
+            if(zipcode < 55001 || zipcode > 56763 || isNaN(zipcode) == true){ //checks for correct range and numeric input
+            errors.push('The zip code must be within Minnesota.')
+        }
+        }
+
+        //checks for any errors and displays them within an alert message
+        if(errors.length > 0){
+            let errorMsg = errors.join('\n')
+            alert(errorMsg)
+            return
+        }
+        //if no errors values are pused to summaryMessage array with template string
+        else{
+            for (let x = 0; x < messageLabels.length; x++){
+                summaryMessage.push(messageLabels[x] + `${values[x]}`)
+            }
+            let finalInfo = summaryMessage.join("<br/>") // joined with new line and placed in <b>
+            orderSummaryParagraph.innerHTML = finalInfo
+        }
+
+        })
+        
+</script>
+
+</body>
+</html>
